@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import FooterBanner from "@/components/FooterBanner";
 import HeroBanner from "@/components/HeroBanner";
+import Product from "@/components/Product";
 import { client } from "@/lib/client";
 
 export default async function Home() {
@@ -18,10 +19,10 @@ export default async function Home() {
       </div>
       <div className="products-container">
         {products?.map((product: any) => (
-          <p key={product?._id}>{product?.name}</p>
+          <Product key={product?._id} product={product} />
         ))}
       </div>
-      <FooterBanner />
+      <FooterBanner banner={banner && banner[0]} />
     </>
   );
 }
