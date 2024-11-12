@@ -6,12 +6,8 @@ import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import DisplayImage from "./widgets/DisplayImage";
 import QuantityButtons from "./widgets/QuantityButtons";
 
-async function ProductDetails({
-  params: { slug },
-}: {
-  params: { slug: string };
-}) {
-  const productQuery = `*[_type == "product" && slug.current == '${slug}'][0]`;
+async function ProductDetails({ params }: { params: { slug: string } }) {
+  const productQuery = `*[_type == "product" && slug.current == '${params.slug}'][0]`;
   const productsQuery = `*[_type == "product"]`;
   const product = await client.fetch(productQuery);
   const products = await client.fetch(productsQuery);
@@ -65,6 +61,6 @@ export async function generateStaticParams() {
   const products = await client.fetch(productsQuery);
 
   return products.map((product: any) => ({
-    slug: String(product?.name),
+    slug: String(product?.slug?.current),
   }));
 }
