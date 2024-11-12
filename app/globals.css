@@ -531,6 +531,8 @@ span.text-red {
 .quantity-desc {
   border: 1px solid gray;
   padding: 6px;
+  display: flex;
+  align-items: center;
 }
 .quantity-desc span {
   font-size: 16px;
@@ -538,15 +540,15 @@ span.text-red {
   cursor: pointer;
 }
 .quantity-desc .minus {
-  border-right: 1px solid gray;
   color: #f02d34;
+  border-right: 1px solid black;
 }
 .quantity-desc .num {
-  border-right: 1px solid gray;
   font-size: 20px;
 }
 .quantity-desc .plus {
   color: rgb(49, 168, 49);
+  border-left: 1px solid black;
 }
 
 .maylike-products-wrapper {
