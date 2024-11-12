@@ -66,13 +66,25 @@ const authSlice = createSlice({
         }
       }
     },
+    clearCartItems: (state) => {
+      state.cartItems = [];
+      state.totalPrice = 0;
+      state.totalQuantities = 0;
+      state.qty = 1;
+    },
   },
 });
 
 const { actions, reducer } = authSlice;
 
-export const { incQty, decQty, onAdd, onRemove, toggleCartItemQuantity } =
-  actions;
+export const {
+  incQty,
+  decQty,
+  onAdd,
+  onRemove,
+  toggleCartItemQuantity,
+  clearCartItems,
+} = actions;
 
 export const getCartItems = (store: { cart: CartSliceType }) =>
   store.cart.cartItems;

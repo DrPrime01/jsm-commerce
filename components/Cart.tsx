@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useRef } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Paystack from "@paystack/inline-js";
 import { useStateContext } from "@/context/StateContext";
 import {
   AiOutlineLeft,
@@ -14,20 +16,67 @@ import Image from "next/image";
 import { urlFor } from "@/lib/client";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  clearCartItems,
   getCartItems,
   getTotalPrice,
   getTotalQuantities,
   onRemove,
   toggleCartItemQuantity,
 } from "@/store/slice/cartSlice";
+import { toast } from "react-toastify";
 
 function Cart() {
   const cartRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const { setShowCart } = useStateContext();
   const dispatch = useDispatch();
   const totalQuantities = useSelector(getTotalQuantities);
   const cartItems = useSelector(getCartItems);
   const totalPrice = useSelector(getTotalPrice);
+
+  async function handlePayment() {
+    try {
+      const data = await fetch(`/api/paystack/transaction/initialize`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "drprime.dev@gmail.com",
+          amount: totalPrice,
+        }),
+      });
+
+      const res = await data.json();
+
+      const handler = Paystack.setup({
+        key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
+        email: "drprime.dev@gmail.com",
+        amount: totalPrice * 100,
+        ref: res?.data?.reference,
+        onClose: () => {
+          toast.error("Payment was not completed. Please try again.");
+        },
+        callback: (response) => {
+          if (response.status === "success") {
+            dispatch(clearCartItems());
+            setShowCart(false);
+            router.push(`/success/${response.reference}`);
+            toast.success("Payment completed successfully!");
+          } else {
+            toast.error("Payment failed. Please try again.");
+          }
+        },
+      });
+
+      // Open the Paystack payment popup
+      handler.openIframe();
+    } catch (error: any) {
+      toast.error(
+        `Error initializing transaction: ${error?.response?.data?.message}`
+      );
+    }
+  }
   return (
     <div className="cart-wrapper" ref={cartRef}>
       <div className="cart-container">
@@ -42,11 +91,11 @@ function Cart() {
         </button>
         {cartItems?.length < 1 && (
           <div className="empty-cart">
-            <AiOutlineShopping size={150} />
+            <AiOutlineShopping size={150} className="self-center" />
             <h3>Your shopping bag is empty </h3>
             <Link href="/">
               <button
-                className="btn"
+                className="btn w-full"
                 type="button"
                 onClick={() => setShowCart(false)}
               >
@@ -122,8 +171,8 @@ function Cart() {
                 <h3>${totalPrice}</h3>
               </div>
               <div className="btn-container">
-                <button className="btn" type="button">
-                  Pay with Stripe
+                <button className="btn" type="button" onClick={handlePayment}>
+                  Pay with Paystack
                 </button>
               </div>
             </div>
