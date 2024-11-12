@@ -3,9 +3,9 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { StateContext } from "@/context/StateContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ClientProvider from "@/context/ClientProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <StateContext>
+      <ClientProvider>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
@@ -45,7 +45,7 @@ export default function RootLayout({
             </footer>
           </div>
         </body>
-      </StateContext>
+      </ClientProvider>
     </html>
   );
 }

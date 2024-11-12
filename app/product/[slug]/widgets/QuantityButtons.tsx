@@ -1,21 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useStateContext } from "@/context/StateContext";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import { useSelector, useDispatch } from "react-redux";
 
-export default function QuantityButtons({ product }: { product: any }) {
-  const { incQty, decQty, qty, onAdd } = useStateContext();
+import { decQty, getQty, incQty, onAdd } from "@/store/slice/cartSlice";
+
+export default function QuantityButtons({ product }: { product: ProductType }) {
+  const dispatch = useDispatch();
+  const qty = useSelector(getQty);
   return (
     <>
       <div className="quantity">
         <h3>Quantity:</h3>
         <p className="quantity-desc">
-          <span className="minus" onClick={decQty}>
+          <span className="minus" onClick={() => dispatch(decQty())}>
             <AiOutlineMinus />
           </span>
           <span className="num">{qty}</span>
-          <span className="plus" onClick={incQty}>
+          <span className="plus" onClick={() => dispatch(incQty())}>
             <AiOutlinePlus />
           </span>
         </p>
@@ -24,7 +27,7 @@ export default function QuantityButtons({ product }: { product: any }) {
         <button
           type="button"
           className="add-to-cart"
-          onClick={() => onAdd(product, qty)}
+          onClick={() => dispatch(onAdd({ product, quantity: qty }))}
         >
           Add to Cart
         </button>

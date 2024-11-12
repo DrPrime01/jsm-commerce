@@ -12,17 +12,22 @@ import {
 import { TiDeleteOutline } from "react-icons/ti";
 import Image from "next/image";
 import { urlFor } from "@/lib/client";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  getCartItems,
+  getTotalPrice,
+  getTotalQuantities,
+  onRemove,
+  toggleCartItemQuantity,
+} from "@/store/slice/cartSlice";
 
 function Cart() {
   const cartRef = useRef<HTMLDivElement>(null);
-  const {
-    totalPrice,
-    totalQuantities,
-    cartItems,
-    setShowCart,
-    toggleCartItemQuantity,
-    onRemove,
-  } = useStateContext();
+  const { setShowCart } = useStateContext();
+  const dispatch = useDispatch();
+  const totalQuantities = useSelector(getTotalQuantities);
+  const cartItems = useSelector(getCartItems);
+  const totalPrice = useSelector(getTotalPrice);
   return (
     <div className="cart-wrapper" ref={cartRef}>
       <div className="cart-container">
@@ -73,7 +78,12 @@ function Cart() {
                           <span
                             className="minus"
                             onClick={() =>
-                              toggleCartItemQuantity(item?._id, "dec")
+                              dispatch(
+                                toggleCartItemQuantity({
+                                  id: item?._id,
+                                  value: "dec",
+                                })
+                              )
                             }
                           >
                             <AiOutlineMinus />
@@ -82,7 +92,12 @@ function Cart() {
                           <span
                             className="plus"
                             onClick={() =>
-                              toggleCartItemQuantity(item?._id, "inc")
+                              dispatch(
+                                toggleCartItemQuantity({
+                                  id: item?._id,
+                                  value: "inc",
+                                })
+                              )
                             }
                           >
                             <AiOutlinePlus />
@@ -92,7 +107,7 @@ function Cart() {
                       <button
                         type="button"
                         className="remove-item"
-                        onClick={() => onRemove(item?._id)}
+                        onClick={() => dispatch(onRemove({ id: item?._id }))}
                       >
                         <TiDeleteOutline />
                       </button>

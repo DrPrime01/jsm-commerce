@@ -4,9 +4,12 @@ import React from "react";
 import { AiOutlineShopping } from "react-icons/ai";
 import Cart from "./Cart";
 import { useStateContext } from "@/context/StateContext";
+import { useSelector } from "react-redux";
+import { getTotalQuantities } from "@/store/slice/cartSlice";
 
 function Navbar() {
-  const { showCart, setShowCart, totalQuantities } = useStateContext();
+  const { showCart, setShowCart } = useStateContext();
+  const totalQuantities = useSelector(getTotalQuantities);
   return (
     <div className="navbar-container">
       <p className="logo">
