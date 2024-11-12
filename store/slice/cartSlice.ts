@@ -72,6 +72,9 @@ const authSlice = createSlice({
       state.totalQuantities = 0;
       state.qty = 1;
     },
+    resetQty: (state) => {
+      state.qty = 1;
+    },
   },
 });
 
@@ -84,6 +87,7 @@ export const {
   onRemove,
   toggleCartItemQuantity,
   clearCartItems,
+  resetQty,
 } = actions;
 
 export const getCartItems = (store: { cart: CartSliceType }) =>
