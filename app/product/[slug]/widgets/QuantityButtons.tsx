@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useRouter } from "next/navigation";
@@ -37,7 +38,7 @@ export default function QuantityButtons({ product }: { product: ProductType }) {
       const popup = new PaystackPop({});
 
       popup.checkout({
-        key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
+        key: `${process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY}`,
         email: "drprime.dev@gmail.com",
         amount: product.price * qty * 100,
         ref: res?.data?.reference,
@@ -54,7 +55,8 @@ export default function QuantityButtons({ product }: { product: ProductType }) {
         },
       });
     } catch (error: any) {
-      toast.error(`Error initializing transaction: ${error}`);
+      console.log(error);
+      toast.error(`Error initializing transaction`);
     }
   }
   return (

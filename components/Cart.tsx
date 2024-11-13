@@ -52,7 +52,7 @@ function Cart() {
       const popup = new PaystackPop({});
 
       popup.checkout({
-        key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
+        key: `${process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY}`,
         email: "drprime.dev@gmail.com",
         amount: totalPrice * 100,
         ref: res?.data?.reference,
