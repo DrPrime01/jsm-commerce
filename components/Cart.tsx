@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Paystack from "@paystack/inline-js";
+import PaystackPop from "@paystack/inline-js";
 import { useStateContext } from "@/context/StateContext";
 import {
   AiOutlineLeft,
@@ -49,7 +49,9 @@ function Cart() {
 
       const res = await data.json();
 
-      const handler = Paystack.setup({
+      const popup = new PaystackPop({});
+
+      popup.checkout({
         key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
         email: "drprime.dev@gmail.com",
         amount: totalPrice * 100,
@@ -57,24 +59,19 @@ function Cart() {
         onClose: () => {
           toast.error("Payment was not completed. Please try again.");
         },
-        callback: (response) => {
-          if (response.status === "success") {
-            dispatch(clearCartItems());
-            setShowCart(false);
-            router.push(`/success/${response.reference}`);
-            toast.success("Payment completed successfully!");
-          } else {
-            toast.error("Payment failed. Please try again.");
-          }
+        onSuccess: (response) => {
+          dispatch(clearCartItems());
+          setShowCart(false);
+          router.push(`/success/${response.reference}`);
+          toast.success("Payment completed successfully!");
+        },
+        onError: (error) => {
+          toast.error(`An error occured: ${error}`);
         },
       });
-
-      // Open the Paystack payment popup
-      handler.openIframe();
     } catch (error: any) {
-      toast.error(
-        `Error initializing transaction: ${error?.response?.data?.message}`
-      );
+      console.log(error);
+      toast.error(`Error initializing transaction`);
     }
   }
   return (

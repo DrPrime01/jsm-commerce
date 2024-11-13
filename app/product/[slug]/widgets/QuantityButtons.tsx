@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
-import Paystack from "@paystack/inline-js";
+import PaystackPop from "@paystack/inline-js";
 
 import {
   decQty,
@@ -34,7 +34,9 @@ export default function QuantityButtons({ product }: { product: ProductType }) {
 
       const res = await data.json();
 
-      const handler = Paystack.setup({
+      const popup = new PaystackPop({});
+
+      popup.checkout({
         key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
         email: "drprime.dev@gmail.com",
         amount: product.price * qty * 100,
@@ -42,19 +44,15 @@ export default function QuantityButtons({ product }: { product: ProductType }) {
         onClose: () => {
           toast.error("Payment was not completed. Please try again.");
         },
-        callback: (response) => {
-          if (response.status === "success") {
-            dispatch(resetQty());
-            router.push(`/success/${response.reference}`);
-            toast.success("Payment completed successfully!");
-          } else {
-            toast.error("Payment failed. Please try again.");
-          }
+        onSuccess: (response) => {
+          dispatch(resetQty());
+          router.push(`/success/${response.reference}`);
+          toast.success("Payment completed successfully!");
+        },
+        onError: (error) => {
+          toast.error(`An error occured: ${error}`);
         },
       });
-
-      // Open the Paystack payment popup
-      handler.openIframe();
     } catch (error: any) {
       toast.error(
         `Error initializing transaction: ${error?.response?.data?.message}`

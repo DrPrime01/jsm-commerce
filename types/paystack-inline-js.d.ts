@@ -24,6 +24,7 @@ declare module "@paystack/inline-js" {
     static setup(options: PaystackOptions): PaystackInstance;
     constructor(options: PaystackOptions);
     openIframe(): void;
+    open(): void;
     resumeTransaction(accessCode: string): void;
     checkout(options: PaystackOptions): void;
   }
