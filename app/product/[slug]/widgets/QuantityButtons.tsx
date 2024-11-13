@@ -54,9 +54,7 @@ export default function QuantityButtons({ product }: { product: ProductType }) {
         },
       });
     } catch (error: any) {
-      toast.error(
-        `Error initializing transaction: ${error?.response?.data?.message}`
-      );
+      toast.error(`Error initializing transaction: ${error}`);
     }
   }
   return (
