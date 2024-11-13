@@ -66,7 +66,8 @@ function Cart() {
           toast.success("Payment completed successfully!");
         },
         onError: (error) => {
-          toast.error(`An error occured: ${error}`);
+          console.log(error);
+          toast.error(`An error occured`);
         },
       });
     } catch (error: any) {
