@@ -51,13 +51,11 @@ export default function QuantityButtons({ product }: { product: ProductType }) {
           toast.success("Payment completed successfully!");
         },
         onError: (error) => {
-          console.log(error);
-          toast.error(`An error occured`);
+          toast.error(`An error occured: ${error.message}`);
         },
       });
     } catch (error: any) {
-      console.log(error);
-      toast.error(`Error initializing transaction`);
+      toast.error(`Error initializing transaction: ${error.message}`);
     }
   }
   return (
