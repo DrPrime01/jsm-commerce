@@ -1,0 +1,105 @@
+[
+  {
+    "fields": [
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "image",
+        "type": "image"
+      },
+      {
+        "name": "buttonText",
+        "type": "string",
+        "title": "ButtonText"
+      },
+      {
+        "name": "product",
+        "type": "string"
+      },
+      {
+        "name": "desc",
+        "type": "string"
+      },
+      {
+        "name": "smallText",
+        "type": "string",
+        "title": "SmallText"
+      },
+      {
+        "name": "midText",
+        "type": "string",
+        "title": "MidText"
+      },
+      {
+        "name": "largeText1",
+        "type": "string",
+        "title": "LargeText1"
+      },
+      {
+        "name": "largeText2",
+        "type": "string",
+        "title": "LargeText2"
+      },
+      {
+        "name": "discount",
+        "type": "string"
+      },
+      {
+        "name": "saleTime",
+        "type": "string",
+        "title": "SaleTime"
+      }
+    ],
+    "name": "banner",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "hotspot": true
+        },
+        "of": [
+          {
+            "type": "image"
+          }
+        ],
+        "name": "image",
+        "type": "array"
+      },
+      {
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "options": {
+          "source": "name",
+          "maxLength": 90
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "name": "price",
+        "type": "number"
+      },
+      {
+        "name": "details",
+        "type": "string"
+      }
+    ],
+    "name": "product",
+    "type": "document"
+  }
+]
