@@ -6,8 +6,13 @@ import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import DisplayImage from "./widgets/DisplayImage";
 import QuantityButtons from "./widgets/QuantityButtons";
 
-async function ProductDetails({ params }: { params: { slug: string } }) {
-  const productQuery = `*[_type == "product" && slug.current == '${params.slug}'][0]`;
+async function ProductDetails({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const productQuery = `*[_type == "product" && slug.current == '${slug}'][0]`;
   const productsQuery = `*[_type == "product"]`;
   const product = await client.fetch(productQuery);
   const products = await client.fetch(productsQuery);
